@@ -19,5 +19,16 @@ architecture using limited hardware and enterprise-grade concepts.
 - Firewalling & basic hardening
 - Monitoring & logging concepts
 
+## Repository Structure
+ECN2026/
+├── docs/        # Architecture, concepts, explanations
+├── sites/       # Per-site documentation (SE / CH / DE)
+├── configs/     # Sanitized configuration examples
+├── diagrams/    # Network diagrams (PNG / SVG)
+└── notes/       # Learning notes & observations
+
 ## Status
 🚧 Work in progress (2026)
+
+## Disclaimer
+This repository contains no real credentials, IP addresses or provider details.
