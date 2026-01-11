@@ -30,5 +30,23 @@ ECN2026/
 ## Status
 🚧 Work in progress (2026)
 
+## Project Roadmap
+
+**Phase 1 – Core Connectivity**
+- Basic connectivity
+- Routing fundamentals
+- Baseline firewall rules
+
+**Phase 2 – Segmentation & Multi-Site**
+- VLAN-based segmentation
+- Site-to-site VPN (WireGuard)
+- Network isolation concepts
+
+**Phase 3 – Security & Operations**
+- Firewall hardening
+- Monitoring & logging concepts
+- Failover and resilience testing
+
+
 ## Disclaimer
 This repository contains no real credentials, IP addresses or provider details.
