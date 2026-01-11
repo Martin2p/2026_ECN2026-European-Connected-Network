@@ -50,3 +50,5 @@ ECN2026/
 
 ## Disclaimer
 This repository contains no real credentials, IP addresses or provider details.
+All diagrams are simplified representations created using simulation tools.
+They do not represent a production environment.
