@@ -1,4 +1,4 @@
-# Cable Validation & Stress Test
+# Ethernet Cable Validation & Stress Test
 
 ## Test Date
 2026-01-11
@@ -39,9 +39,11 @@ Result:
 
 ## Observations
 - Stable performance at 1 GbE under sustained load
-- No CRC, RX or TX errors observed during active cable movement
+- No CRC, RX or TX errors observed during the entire test duration
+- No errors observed while actively moving and flexing the cable
 - Physical connectors and crimps remained stable under mechanical stress
 
 ## Conclusion
-Cable construction impacts high-speed Ethernet stability.
-Round, shielded cables recommended for ≥2.5 GbE.
+The self-crimped Cat5e flat Ethernet cable operates reliably at 1 GbE.
+Crimp quality and mechanical stability were validated under load and movement.
+No physical-layer errors were detected during testing.
