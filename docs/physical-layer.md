@@ -1,3 +1,11 @@
+> **TL;DR**
+> - Copper Ethernet is used across the project
+> - Self-crimped cables were validated under load
+> - Flat cables showed instability at higher speeds
+> - Monitoring relies on error counters and throughput
+> - Validation is practical, not certification-grade
+
+
 ## Physical Layer Scope
 
 This document describes the physical layer design principles, validation approach,
