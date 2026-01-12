@@ -4,10 +4,9 @@
 2026-01-11
 
 ## Cable Details
-- Type: Self-crimped Ethernet cable
+- Type: Self-crimped Ethernet cable (FTP)
 - Category: Cat5e
 - Length: ~15 m
-- Construction: flat / unshielded
 
 ## Test Environment
 - Switch: TP-Link Omada SG3210X-M2 (Managed L2+)
