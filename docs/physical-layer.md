@@ -1,5 +1,8 @@
 ## Physical Layer Scope
 
+This document describes the physical layer design principles, validation approach,
+and limitations used within the ECN2026 project.
+
 The physical layer covers all passive and active components responsible for signal transmission:
 
 - Ethernet cabling (copper)
@@ -13,7 +16,7 @@ Wireless technologies are out of scope for this document.
 ## Cabling Standards & Design Decisions
 
 - Twisted-pair copper Ethernet is used throughout the project
-- Focus on Cat5e / Cat6-class cabling for realism and availability
+- Focus on Cat5e / Cat6-class cabling  to balance realism, availability, and cost
 - Self-crimped cables are intentionally used to validate installation quality
 - Flat Ethernet cables are evaluated but treated as non-preferred for high-speed links
 
@@ -27,7 +30,8 @@ Physical layer quality is evaluated using the following indicators:
 - Throughput stability under load
 - Duplex and speed consistency
 
-Monitoring is performed on both switch and host level.
+Monitoring is performed on both switch and host level using interface statistics,
+error counters, and throughput measurements.
 
 ## Known Limitations
 
