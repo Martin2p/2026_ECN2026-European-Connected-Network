@@ -28,6 +28,10 @@ Wireless technologies are out of scope for this document.
 - Self-crimped cables are intentionally used to validate installation quality
 - Flat Ethernet cables are evaluated but treated as non-preferred for high-speed links
 
+![Self-crimped RJ45 termination](images/rj45_crimping.jpeg)
+
+*Self-crimped RJ45 termination used for copper Ethernet validation.*
+
 ## Error Metrics & Monitoring
 
 Physical layer quality is evaluated using the following indicators:
