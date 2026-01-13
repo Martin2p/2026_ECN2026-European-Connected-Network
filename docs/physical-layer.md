@@ -65,3 +65,21 @@ This reflects real-world troubleshooting, where Layer 1 and Layer 2 are tightly 
 Practical cable validation tests are documented separately:
 - [Link Instability Analysis (Layer 1/2) – 2026-01-11](test-reports/2026-01-11_link-instability-analysis.md)
 - [Cable Validation Report – 2026-01-11](test-reports/2026-01-11_cable-validation.md)
+
+## Field Observation: Conductor Material in Structured Cabling
+
+During a construction site visit, a structured cabling installation was observed
+using Cat7 installation cables (orange jacket, AWG22) with CCA (Copper Clad Aluminum)
+conductors.
+
+While the category and conductor size suggest high-performance cabling, the use of
+CCA introduces technical limitations compared to solid copper conductors. These may
+include increased attenuation, reduced mechanical robustness, and restrictions when
+using Power over Ethernet (PoE), especially under higher load conditions.
+
+This observation highlights that cable category labeling alone is not sufficient for
+evaluating cable quality. Verifying the conductor material is equally important,
+particularly in professional and long-term network installations.
+
+This observation aligns with the project’s focus on practical validation and material-aware
+infrastructure design at OSI Layer 1.
