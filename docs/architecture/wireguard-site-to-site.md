@@ -3,8 +3,7 @@
 *ECN2026 – Network Architecture*
 
 > **Architecture Diagram:**  
-> `docs/diagrams/vpn/wireguard-site-to-site.drawio`
-
+> ![WireGuard Site-to-Site VPN Architecture](../diagrams/vpn/wireguard-site-to-site.drawio.png)
 > The diagram illustrates the routed Site-to-Site VPN topology and transit network separation.
 ---
 
