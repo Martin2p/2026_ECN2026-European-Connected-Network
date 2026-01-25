@@ -1,3 +1,5 @@
+🌍 Language: [English](README.md) | [Svenska](README.sv.md)
+
 # ECN2026 – European Connected Network
 
 ## Overview
