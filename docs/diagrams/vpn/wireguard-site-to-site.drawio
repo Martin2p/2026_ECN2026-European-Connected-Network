@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.3.4">
+  <diagram name="Seite-1" id="C7zKGVH-t-AtJuqFd_hv">
+    <mxGraphModel dx="656" dy="1025" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="wg0: 10.100.0.1/24&lt;br&gt;&lt;div&gt;Role: VPN Hub / Router&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Transit Network: 10.100.0.0/24&lt;br&gt;(No Clients, No Services)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="160" x="80" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#99E8AA;strokeColor=#82b366;" value="wg0: 10.100.0.2/24&#xa;IP Forwarding Enabled" vertex="1">
+          <mxGeometry height="60" width="170" x="540" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;labelBackgroundColor=none;fontColor=#46495D;fontStyle=1;fontSize=13;" value="Raspberry Pi&lt;br&gt;Site Gateway" vertex="1">
+          <mxGeometry height="30" width="140" x="555" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;labelBackgroundColor=none;fontColor=#46495D;font=bold;fontStyle=1;fontSize=13;" value="VPS (Cloud Hub)&lt;br&gt;Ubuntu 24.04&lt;br&gt;WireGuard Server" vertex="1">
+          <mxGeometry height="50" width="170" x="80" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=0;" value="&lt;div&gt;WireGuard (Full-Tunnel)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;AllowedIPs: 0.0.0.0/0&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="70" x="125" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;labelBackgroundColor=none;fontColor=#46495D;fontStyle=1" value="&lt;div&gt;Mobile&lt;/div&gt;&lt;div&gt;Client&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="90" x="115" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;labelBackgroundColor=none;fontColor=#46495D;" value="WireGuard Site-to-Site Tunnel&lt;br&gt;(Encrypted, Routed)&lt;br&gt;Transit Network: 10.100.0.0/24&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="45" width="190" x="300" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-11" edge="1" parent="1" source="knX6Q0xkWM_VWgV5f3-R-2" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fontSize=22;startSize=8;endSize=8;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=none;strokeColor=#000000;fontColor=default;fontStyle=1;sourcePerimeterSpacing=8;strokeWidth=2;" target="knX6Q0xkWM_VWgV5f3-R-3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="330" y="300" as="sourcePoint" />
+            <mxPoint x="380" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#d5e8d4;strokeColor=#82b366;shadow=0;glass=0;" value="Local LAN&lt;br&gt;192.168.x.0/24" vertex="1">
+          <mxGeometry height="60" width="120" x="565" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-15" edge="1" parent="1" source="knX6Q0xkWM_VWgV5f3-R-13" style="endArrow=none;html=1;rounded=0;fontSize=12;startSize=8;endSize=8;curved=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;labelBackgroundColor=none;strokeColor=#000000;fontColor=default;strokeWidth=2;" target="knX6Q0xkWM_VWgV5f3-R-3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="460" as="sourcePoint" />
+            <mxPoint x="420" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-17" edge="1" parent="1" source="knX6Q0xkWM_VWgV5f3-R-7" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;fontSize=12;fontColor=#46495D;startSize=8;endSize=8;curved=1;fillColor=#B2C9AB;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;" target="knX6Q0xkWM_VWgV5f3-R-2" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="390" as="sourcePoint" />
+            <mxPoint x="420" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=12;fontColor=#46495D;" value="&lt;div&gt;WireGuard Client&lt;/div&gt;&lt;div&gt;&amp;nbsp;(Full-Tunnel)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="100" x="160" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="knX6Q0xkWM_VWgV5f3-R-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=16;fontColor=#46495D;" value="&lt;b&gt;&lt;span style=&quot;color: rgb(14, 66, 255);&quot;&gt;WireGuard Site-to-Site VPN Architecture&lt;br&gt;Raspberry Pi ↔ VPS (ECN2026)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="50" width="340" x="250" y="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
