@@ -1,0 +1,1 @@
+“Configuration pending hardware delivery”
