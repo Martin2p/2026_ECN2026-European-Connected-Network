@@ -1,1 +1,1 @@
-(planned)
+“Configuration pending hardware delivery”
