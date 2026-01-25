@@ -24,7 +24,7 @@ architecture using limited hardware and enterprise-grade concepts.
 ## Repository Structure
 ECN2026/
 ├── docs/        # Architecture, concepts, explanations
-├── sites/       # Per-site documentation (SE / CH / DE)
+├── sites/       # Per-site documentation
 ├── configs/     # Sanitized configuration examples
 ├── diagrams/    # Network diagrams (PNG / SVG)
 └── notes/       # Learning notes & observations
