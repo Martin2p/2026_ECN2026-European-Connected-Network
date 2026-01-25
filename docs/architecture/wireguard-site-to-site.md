@@ -4,6 +4,8 @@
 
 > **Architecture Diagram:**  
 > `docs/diagrams/vpn/wireguard-site-to-site.drawio`
+
+> The diagram illustrates the routed Site-to-Site VPN topology and transit network separation.
 ---
 
 ## TL;DR
