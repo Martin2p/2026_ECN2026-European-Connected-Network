@@ -25,7 +25,10 @@ Today’s work focused on stabilizing the physical and logical connectivity betw
   - Tunnel successfully established
   - Routing and name resolution verified
   - Prepared for integration into the ECN2026 site-to-site topology
-
+    
+- **WireGuard troubleshooting**
+  - No handshake due to `Responder` enabled on NATed RB5009
+  - Responder disabled → tunnel established immediately
 ---
 
 ### Result
