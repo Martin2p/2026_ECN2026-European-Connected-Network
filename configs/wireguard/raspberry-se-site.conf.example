@@ -1,0 +1,17 @@
+# WireGuard configuration – SE Site (Raspberry Pi)
+# Sensitive values such as keys and endpoint have been removed.
+
+[Interface]
+Address = 10.100.0.21/24
+ListenPort = 51820
+PrivateKey= <REDACTED>
+
+# VPN hub – VPS in Germany
+[Peer]
+PublicKey = <REDACTED>
+
+# Routes to remote networks via VPN hub
+AllowedIPs = 192.168.88.0/24, 10.100.0.0/24
+
+Endpoint = <REDACTED>
+PersistentKeepalive = 25
