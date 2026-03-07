@@ -1,0 +1,158 @@
+table inet myfirewall {
+     set addr-set-sshd {
+                type ipv4_addr
+     }
+
+     chain f2b-chain {
+                tcp dport 22 ip saddr @addr-set-sshd reject with icmp port-unreachable
+     }
+
+     chain input {
+                type filter hook input priority filter; policy drop;
+
+                # Docker https and http
+                iifname "docker0" tcp dport {80,443} accept
+
+                iif "lo" accept
+
+                # Allow established and related connections
+                ct state established,related accept
+
+                # Allow SSH access via VPN
+                iifname "wg0" tcp dport 22 accept
+
+                # Wireguard
+                udp dport 51820 accept
+
+                # Prometheus
+                iifname "wg0" tcp dport 9090 accept
+
+                # Allow Prometheus Node Exporter (VPN only)
+                iifname "wg0" tcp dport 9100 accept
+
+                # Allow Grafana dashboard access (VPN only)
+                iifname "wg0" tcp dport 3000 accept
+
+                # Rate-limit ICMP to prevent flooding
+                ip protocol icmp limit rate 10/second accept
+                ip6 nexthdr ipv6-icmp limit rate 10/second accept
+
+                jump f2b-chain
+
+                tcp dport 80 accept
+                tcp dport 443 accept
+                iifname "eth0" tcp dport 80 accept
+                iifname "eth0" tcp dport 443 accept
+                limit rate 5/minute log prefix "NF-INPUT-DROP: " flags all counter packets 326531 bytes 17623988 drop
+        }
+
+   chain forward {
+                type filter hook forward priority filter; policy drop;
+
+                # Allow established and related connections
+                ct state established,related accept
+
+                # Allow Docker containers to perform DNS queries
+                ip saddr 172.19.0.0/16 udp dport 53 accept comment "allow Docker DNS"
+                ip saddr 172.19.0.0/16 tcp dport 53 accept
+
+                # Allow Docker containers to send mail via SMTP (port 587)
+                ip saddr 172.19.0.0/16 tcp dport 587 accept comment "allow Docker SMTP traffic"
+
+                # Allow HTTP/HTTPS for Certbot certificate renewal
+                ip saddr 172.19.0.0/16 tcp dport {80,443} accept
+
+                # Allow WireGuard clients to access the Internet (full tunnel)
+                iifname "wg0" oifname "eth0" accept
+
+                # Allow established return traffic from Internet to WireGuard
+                iifname "eth0" oifname "wg0" ct state established,related accept
+
+                # Allow traffic between WireGuard peers
+                iifname "wg0" oifname "wg0" accept
+
+                # Log and drop remaining forwarded packets
+                limit rate 5/minute log prefix "NF-FORWARD-DROP: " flags all counter packets 0 bytes 0 drop
+                }
+
+        chain output {
+                type filter hook output priority filter; policy accept;
+        }
+}
+
+# Nat-Rules
+table ip nat {
+        chain POSTROUTING {
+                type nat hook postrouting priority srcnat; policy accept;
+
+                # Do not apply NAT to site-to-site traffic
+                # CH LAN
+                ip saddr 10.100.0.0/24 ip daddr 192.168.8.0/24 return
+                # SE LAN
+                ip saddr 10.100.0.0/24 ip daddr 192.168.101.0/24 return
+
+                # Apply NAT for WireGuard clients using full-tunnel Internet access
+                ip saddr 10.100.0.0/24 oifname "eth0" masquerade comment "wg outbound"
+
+                # Apply NAT for Docker containers
+                ip saddr 172.19.0.0/16 oifname "eth0" masquerade comment "docker outbound"
+        }
+}
+
+# Rules for Fail2Ban
+table inet f2b-table {
+        set addr-set-sshd {
+                type ipv4_addr
+        }
+
+        chain f2b-chain {
+                type filter hook input priority filter - 1; policy accept;
+                tcp dport 22 ip saddr @addr-set-sshd reject with icmp port-unreachable
+        }
+}
+table ip6 nat {
+        chain PREROUTING {
+                type nat hook prerouting priority dstnat; policy accept;
+                fib daddr type local counter packets 0 bytes 0 jump DOCKER
+        }
+
+        chain OUTPUT {
+                type nat hook output priority -100; policy accept;
+                ip6 daddr != ::1 fib daddr type local counter packets 0 bytes 0 jump DOCKER
+        }
+
+        chain DOCKER {
+        }
+}
+table ip6 filter {
+        chain DOCKER-FORWARD {
+                counter packets 0 bytes 0 jump DOCKER-CT
+                counter packets 0 bytes 0 jump DOCKER-ISOLATION-STAGE-1
+                counter packets 0 bytes 0 jump DOCKER-BRIDGE
+        }
+
+        chain FORWARD {
+                type filter hook forward priority filter; policy accept;
+                counter packets 0 bytes 0 jump DOCKER-USER
+                counter packets 0 bytes 0 jump DOCKER-FORWARD
+        }
+
+        chain DOCKER-USER {
+        }
+
+        chain DOCKER {
+        }
+	
+	
+        chain DOCKER-BRIDGE {
+        }
+
+        chain DOCKER-CT {
+        }
+
+        chain DOCKER-ISOLATION-STAGE-1 {
+        }
+
+        chain DOCKER-ISOLATION-STAGE-2 {
+        }
+}
