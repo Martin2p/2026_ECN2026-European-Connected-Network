@@ -1,4 +1,5 @@
 # WireGuard configuration – SE Site (Raspberry Pi)
+# ECN2026 project
 # Sensitive values such as keys and endpoint have been removed.
 
 [Interface]
