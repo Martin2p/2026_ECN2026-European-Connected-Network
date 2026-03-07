@@ -1,0 +1,29 @@
+[Interface]
+Address = 10.100.0.1/24
+ListenPort = 51820
+PrivateKey = <REDACTED>
+
+# CH Site – MikroTik RB5009
+[Peer]
+PublicKey = <REDACTED>
+AllowedIPs = 10.100.0.19/32, 192.168.88.0/24, 192.168.8.0/24
+
+# SE Site – Raspberry Pi gateway
+[Peer]
+PublicKey  = <REDACTED>
+AllowedIPs = 10.100.0.21/32, 192.168.101.0/24, 192.168.50.0/24
+
+# Road client – Netbook
+[Peer]
+PublicKey  = <REDACTED>
+AllowedIPs = 10.100.0.20/32
+
+# Road client – Netbook
+[Peer]
+PublicKey  = <REDACTED>
+AllowedIPs = 10.100.0.23/32
+
+# Road client – Netbook
+[Peer]
+PublicKey  = <REDACTED>
+AllowedIPs = 10.100.0.24/32
