@@ -1,4 +1,5 @@
 # WireGuard configuration – VPS hub (Germany)
+# ECN2026 project
 # Sensitive values such as keys and endpoint have been removed.
 # Hub-and-spoke WireGuard topology used for ECN2026 multi-site connectivity.
 
