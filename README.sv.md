@@ -48,8 +48,8 @@ ECN2026/
 **Fas 3 – Säkerhet & drift**
 - Härdning av brandvägg och system ✔
 - Sårbarhetsskanning (OpenVAS) 🚧
-- Loggning och granskningsbarhet
-- Failover- och resiliens-tester
+- Loggning / SIEM (Wazuh) 🚧
+- Failover- och resiliens-tester 🚧
 
 ## Nätverksöversiktsdiagram
 
