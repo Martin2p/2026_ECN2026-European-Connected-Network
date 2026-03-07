@@ -2,6 +2,18 @@
 
 # ECN2026 – European Connected Network
 
+## Technologies Used
+
+- Linux
+- Docker
+- WireGuard
+- Prometheus
+- Grafana
+- OpenVAS
+- nftables
+- Nginx
+
+
 ## Overview
 ECN2026 is a personal network engineering project simulating a multi-site
 European network across Sweden, Switzerland and Germany.
