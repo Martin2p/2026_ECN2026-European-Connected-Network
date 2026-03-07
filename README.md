@@ -35,19 +35,22 @@ ECN2026/
 ## Project Roadmap
 
 **Phase 1 – Core Connectivity**
-- Basic connectivity
-- Routing fundamentals
-- Baseline firewall rules
+- Basic connectivity ✔
+- Routing fundamentals ✔
+- Baseline firewall rules ✔
 
 **Phase 2 – Segmentation & Multi-Site**
-- VLAN-based segmentation
-- Site-to-site VPN (WireGuard)
-- Network isolation concepts
+- Subnet-based network segmentation ✔
+- Site-to-site VPN (WireGuard) ✔
+- Traffic isolation and access control ✔
 
 **Phase 3 – Security & Operations**
-- Firewall hardening
-- Monitoring & logging concepts
+- Firewall and system hardening ✔
+- Vulnerability scanning (OpenVAS) 🚧
+- Logging and audit visibility
 - Failover and resilience testing
+
+
 ## Network Overview Diagram
 
 ![ECN2026 Network Overview](diagrams/ECN2026_overview.png)
