@@ -36,19 +36,20 @@ ECN2026/
 ## Projekt-roadmap
 
 **Fas 1 – Grundläggande konnektivitet**
-- Basanslutning
-- Routing-grunder
-- Grundläggande brandväggsregler
+- Grundläggande nätverksanslutning ✔
+- Routing-grunder ✔
+- Grundläggande brandväggsregler ✔
 
 **Fas 2 – Segmentering & multi-site**
-- VLAN-baserad segmentering
-- Site-to-site VPN (WireGuard)
-- Nätverksisolering och zonindelning
+- Subnätbaserad nätverkssegmentering ✔
+- Site-to-site-VPN (WireGuard) ✔
+- Trafikisolering och åtkomstkontroll ✔
 
 **Fas 3 – Säkerhet & drift**
-- Förstärkt brandväggskonfiguration
-- Övervaknings- och loggningskoncept
-- Test av failover och resiliens
+- Härdning av brandvägg och system ✔
+- Sårbarhetsskanning (OpenVAS) 🚧
+- Loggning och granskningsbarhet
+- Failover- och resiliens-tester
 
 ## Nätverksöversiktsdiagram
 
