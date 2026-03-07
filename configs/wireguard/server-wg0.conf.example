@@ -1,3 +1,7 @@
+# WireGuard configuration – VPS hub (Germany)
+# Sensitive values such as keys and endpoint have been removed.
+# Hub-and-spoke WireGuard topology used for ECN2026 multi-site connectivity.
+
 [Interface]
 Address = 10.100.0.1/24
 ListenPort = 51820
@@ -18,12 +22,12 @@ AllowedIPs = 10.100.0.21/32, 192.168.101.0/24, 192.168.50.0/24
 PublicKey  = <REDACTED>
 AllowedIPs = 10.100.0.20/32
 
-# Road client – Netbook
+# Road client – Windows
 [Peer]
 PublicKey  = <REDACTED>
 AllowedIPs = 10.100.0.23/32
 
-# Road client – Netbook
+# Road client – Linux
 [Peer]
 PublicKey  = <REDACTED>
 AllowedIPs = 10.100.0.24/32
