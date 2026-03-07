@@ -73,6 +73,8 @@ Node Exporter Full
 Grafana Dashboard ID: 1860
 ```
 
+![Grafana Monitoring Dashboard](../../docs/images/grafana-dashboard.png)
+
 This provides a complete overview of:
 
 - CPU utilization
