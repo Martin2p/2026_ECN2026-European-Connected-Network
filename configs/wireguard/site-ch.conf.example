@@ -1,0 +1,15 @@
+# WireGuard configuration – CH Site (MikroTik RB5009)
+# Sensitive values such as keys and endpoint have been removed.
+
+[Interface]
+ListenPort = 51820
+PrivateKey = <REDACTED>
+
+[Peer]
+# ECN2026 VPN Server (VPS)
+PublicKey = <REDACTED>
+
+AllowedIPs = 10.100.0.0/24, 192.168.88.0/24, 192.168.8.0/24
+Endpoint = <REDACTED>
+
+PersistentKeepalive = 25
