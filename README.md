@@ -58,7 +58,8 @@ ECN2026/
 
 **Phase 3 – Security & Operations**
 - Firewall and system hardening ✔
-- Vulnerability scanning (OpenVAS) 🚧
+- Vulnerability scanning (OpenVAS, Lynis) ✔
+- Monitoring & Observability (Prometheus, Grafana) ✔
 - Logging / SIEM (Wazuh) 🚧
 - Failover and resilience testing 🚧
 
