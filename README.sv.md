@@ -46,10 +46,11 @@ ECN2026/
 - Trafikisolering och åtkomstkontroll ✔
 
 **Fas 3 – Säkerhet & drift**
-- Härdning av brandvägg och system ✔
-- Sårbarhetsskanning (OpenVAS) 🚧
+- Brandvägg och systemhärdning ✔
+- Sårbarhetsskanning (OpenVAS, Lynis) ✔
+- Övervakning & observerbarhet (Prometheus, Grafana) ✔
 - Loggning / SIEM (Wazuh) 🚧
-- Failover- och resiliens-tester 🚧
+- Failover- och resilenstestning 🚧
 
 ## Nätverksöversiktsdiagram
 
