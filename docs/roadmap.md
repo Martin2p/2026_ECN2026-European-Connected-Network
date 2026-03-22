@@ -11,7 +11,6 @@ It reflects a realistic learning and implementation sequence.
 
 ## Phase 2 – Segmentation & Multi-Site
 - VLAN design and implementation
-- Inter-VLAN routing
 - Site-to-site VPN tunnels
 - Logical network separation
 
