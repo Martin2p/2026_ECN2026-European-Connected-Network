@@ -28,7 +28,6 @@ architecture using limited hardware and enterprise-grade concepts.
 
 ## Key Topics
 - Routing & subnetting
-- VLAN-based segmentation
 - Site-to-site VPN (WireGuard)
 - Firewalling & basic hardening
 - Monitoring & logging concepts
