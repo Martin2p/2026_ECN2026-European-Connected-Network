@@ -17,7 +17,6 @@ enterprise-liknande koncept.
 
 ## Centrala områden
 - Routing och subnetting
-- VLAN-baserad segmentering
 - Site-to-site VPN (WireGuard)
 - Brandväggar och grundläggande hardening
 - Övervaknings- och loggningskoncept
