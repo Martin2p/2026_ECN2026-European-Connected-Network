@@ -2,101 +2,218 @@
 
 ## Overview
 
-This project implements Wazuh as a SIEM (Security Information and Event Management) solution
-to monitor and protect a web server. All central Wazuh components run as
-Docker containers on the same host, while the Wazuh Agent is installed natively to ensure
-full visibility into the host system.
+This document describes the deployment of Wazuh as a SIEM (Security Information and Event
+Management) solution within the ECN2026 project. All central Wazuh components run as Docker
+containers on the Contabo VPS, while the Wazuh Agent is installed natively on the host to
+ensure full visibility into the host system.
+
+The Wazuh Dashboard is accessible exclusively via WireGuard VPN at `https://10.100.0.1:8443`,
+consistent with the security model applied to Grafana and OpenVAS within ECN2026.
+
+---
+
+## Purpose within ECN2026
+
+Wazuh serves as the SIEM layer of ECN2026, complementing the existing monitoring stack
+(Prometheus, Grafana) with security-focused capabilities: log analysis, file integrity
+monitoring, threat detection, and compliance reporting. It provides visibility into security
+events across the simulated European network infrastructure.
+
+---
 
 ## Architecture
 
-| Component | Deployment | Purpose |
-|---|---|---|
-| Wazuh Server | Docker Container | Analyzes agent data, processes rules & decoders, detects threats |
-| Wazuh Indexer | Docker Container | Indexes and stores alerts, enables real-time search & analytics |
-| Wazuh Dashboard | Docker Container | Web UI for visualization, alert management, and compliance |
-| Wazuh Agent | Native on Host | Collects logs, monitors file integrity, reports to Wazuh Server |
+```
++---------------------------------------------------+
+|              Contabo VPS (Ubuntu 24.04)           |
+|                                                   |
+|  +---------------+   +------------------------+  |
+|  | Wazuh Manager |   |     Wazuh Indexer      |  |
+|  | (Docker)      |<->| (Docker / OpenSearch)  |  |
+|  +---------------+   +------------------------+  |
+|          ^                      |                 |
+|          |            +---------+--------+        |
+|          |            | Wazuh Dashboard  |        |
+|          |            | (Docker)         |        |
+|          |            | 10.100.0.1:8443  |        |
+|          |            +------------------+        |
+|          |                                        |
+|  +-------+-------+                               |
+|  |  Wazuh Agent  |  (native on host)             |
+|  +---------------+                               |
++---------------------------------------------------+
+         ^
+         | WireGuard VPN only
+         |
+   [ Admin Client ]
+```
 
-### Architecture Decision: Single-Host Docker Deployment
+| Component       | Deployment       | Purpose                                                        |
+|----------------|------------------|----------------------------------------------------------------|
+| Wazuh Manager  | Docker Container | Analyzes agent data, processes rules & decoders, detects threats |
+| Wazuh Indexer  | Docker Container | Indexes and stores alerts, enables real-time search & analytics |
+| Wazuh Dashboard| Docker Container | Web UI for visualization, alert management, and compliance      |
+| Wazuh Agent    | Native on Host   | Collects logs, monitors file integrity, reports to Wazuh Manager |
 
-**Context:** The project runs on a single VPS (8 GB RAM, 3 CPU Cores) that also
-hosts the web server. A dedicated SIEM server is not available.
+---
 
-**Decision:** Deploy Wazuh Server, Indexer, and Dashboard as Docker containers on the same
-host. Install the Wazuh Agent natively.
+## Architecture Decisions
 
-**Reasoning:**
-- Docker provides process isolation between the SIEM stack and the web server
-- The Wazuh Agent must run natively because a containerized agent cannot directly
-  access or monitor the host system (logs, file integrity, processes)
-- A single-host deployment is sufficient for monitoring one endpoint in a learning
-  and portfolio context
+### Single-Host Docker Deployment
 
-**Trade-offs:**
-- If an attacker gains root access on the host, Docker isolation will not protect the
-  SIEM data — this is an accepted risk for this project scope
-- Resource constraints require careful memory limits on all containers
+**Context:** The ECN2026 project runs on a single Contabo VPS (8 GB RAM, 3 CPU Cores) that
+also hosts the web server, Grafana, Prometheus, and OpenVAS. A dedicated SIEM server is not
+available.
 
-## Resource Allocation
+**Decision:** Deploy Wazuh Manager, Indexer, and Dashboard as Docker containers using the
+official `wazuh-docker` single-node setup. Install the Wazuh Agent natively on the host.
 
-Total available: **8 GB RAM / 3 CPU Cores**
+**Reasoning:** The single-node Docker deployment is the most resource-efficient option for a
+single-server environment. Native agent installation (rather than containerized) provides
+complete host visibility including access to all system logs, file system events, and kernel
+activity — which a containerized agent cannot fully achieve.
 
-| Component | RAM Limit | Notes |
-|---|---|---|
-| Wazuh Indexer | 2 GB | Largest consumer (OpenSearch), heap limited via `OPENSEARCH_JAVA_OPTS` |
-| Wazuh Server | 1 GB | Handles analysis engine, API, agent connection |
-| Wazuh Dashboard | 1 GB | Web UI, queries Indexer API |
-| Wazuh Agent | ~50 MB | Lightweight, runs natively |
-| Host OS + Web Server + Docker | ~4 GB | Remaining resources for all other services |
+**Trade-offs:** All components share the same host resources. In a production environment,
+Manager, Indexer, and Dashboard would run on dedicated infrastructure.
 
-## Network Access
+---
 
-All management interfaces are accessible exclusively through the WireGuard VPN tunnel.
-No management ports are exposed to the public internet. This follows the same access
-policy applied to Grafana and OpenVAS on this server.
+### VPN-Only Dashboard Access
 
-| Service | Port | Access |
-|---|---|---|
-| Wazuh Agent Connection | 1514/TCP | localhost only (Agent runs on same host) |
-| Wazuh Server API | 55000/TCP | VPN only (WireGuard) |
-| Wazuh Indexer | 9200/TCP | localhost only (internal communication) |
-| Wazuh Dashboard | 443/TCP | **VPN only** (WireGuard) |
+**Context:** The Wazuh Dashboard exposes sensitive security data and must not be reachable
+from the public internet.
 
-### Access Control — Defense in Depth
+**Decision:** Bind the Dashboard container exclusively to the WireGuard interface IP
+(`10.100.0.1:8443:5601`) and enforce access via nftables rules on `iifname "wg0"`.
 
-Access restriction is enforced at two levels:
+**Reasoning:** Consistent with the existing security model for Grafana (`10.100.0.1:3000`)
+and OpenVAS (`10.100.0.1:8443` → moved to avoid conflict). Two independent enforcement
+layers: Docker port binding and nftables.
 
-**1. Docker Port Binding**
-Dashboard and API bind exclusively to the WireGuard interface IP:
+**Trade-offs:** Dashboard is only accessible when connected to WireGuard VPN. Acceptable for
+a single-administrator setup.
+
+---
+
+## Deployment
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- WireGuard VPN operational (`wg0` interface at `10.100.0.1`)
+- nftables configured with forward chain for Docker subnets
+- `/etc/resolv.conf` symlinked to `/run/systemd/resolve/resolv.conf` (not the stub resolver)
+
+### Repository
+
+```bash
+git clone https://github.com/wazuh/wazuh-docker.git
+cd wazuh-docker
+git checkout v4.14.0
+cd single-node/
+```
+
+### Certificate Generation
+
+```bash
+sudo docker compose -f generate-indexer-certs.yml run --rm generator
+```
+
+Certificates are written to `config/wazuh_indexer_ssl_certs/`.
+
+### Stack Start
+
+```bash
+sudo docker compose up -d
+```
+
+Dashboard available at `https://10.100.0.1:8443` via WireGuard.
+
+### Agent Installation
+
+```bash
+curl -s https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.14.0-1_amd64.deb \
+  -o /tmp/wazuh-agent.deb
+sudo WAZUH_MANAGER='127.0.0.1' dpkg -i /tmp/wazuh-agent.deb
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+```
+
+---
+
+## Lessons Learned
+
+### 1. Docker containers had no internet access
+
+**Problem:** The certificate generator container failed with `The tool to create the
+certificates does not exist in any bucket`. The container script downloads `wazuh-certs-tool.sh`
+from `packages.wazuh.com` at runtime, but DNS resolution failed inside the container.
+
+**Root cause:** Two separate issues combined:
+
+- `/etc/resolv.conf` pointed to `127.0.0.53` (systemd-resolved stub), which is unreachable
+  from inside Docker containers.
+- The nftables `forward` chain had `policy drop` and only allowed outbound traffic for
+  specific Docker subnets (`172.19.0.0/16`). The Docker bridge network (`172.17.0.0/16`)
+  and Docker Compose networks (`172.16.0.0/12`) were missing.
+
+**Fix 1 — resolv.conf:**
+```bash
+sudo unlink /etc/resolv.conf
+sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+```
+This replaces the stub resolver with the actual upstream DNS servers from the provider.
+
+**Fix 2 — nftables forward chain (added to `/etc/nftables.conf`):**
+```
+# Docker bridge DNS
+ip saddr 172.17.0.0/16 udp dport 53 accept comment "docker bridge DNS"
+ip saddr 172.16.0.0/12 udp dport 53 accept comment "docker compose DNS"
+
+# Docker bridge outbound
+ip saddr 172.17.0.0/16 tcp dport { 80, 443 } accept comment "docker bridge outbound"
+ip saddr 172.16.0.0/12 tcp dport { 80, 443 } accept comment "docker compose outbound"
+```
+
+**Fix 3 — nftables NAT/masquerading (added to `table ip nat POSTROUTING`):**
+```
+ip saddr 172.17.0.0/16 oifname "eth0" masquerade comment "docker bridge outbound"
+ip saddr 172.16.0.0/12 oifname "eth0" masquerade comment "docker compose outbound"
+```
+
+**Note:** `"iptables": false` is set in `/etc/docker/daemon.json` because the host uses
+nftables instead of iptables. This means Docker does not set up its own NAT or FORWARD rules
+— these must be maintained manually in nftables.
+
+---
+
+### 2. Dashboard port conflict with OpenVAS
+
+**Problem:** `docker compose up` failed because port 443 was already allocated by the host
+Nginx web server.
+
+**Fix:** Changed the Dashboard port binding in `docker-compose.yml`:
 ```yaml
-services:
-  wazuh.dashboard:
-    ports:
-      - "10.x.x.1:443:5601"    # VPN interface only
-  wazuh.manager:
-    ports:
-      - "10.x.x.1:55000:55000" # VPN interface only
-      - "127.0.0.1:1514:1514"  # localhost only (agent connection)
+# Before:
+ports:
+  - "443:5601"
+
+# After:
+ports:
+  - "10.100.0.1:8443:5601"
 ```
 
-**2. nftables Firewall Rules**
-Management ports are explicitly allowed only on the WireGuard interface (`wg0`):
-```
-iifname "wg0" tcp dport 443 accept
-iifname "wg0" tcp dport 55000 accept
-```
+---
 
-For the complete firewall ruleset, see [`docs/firewall-nftables/`](../firewall-nftables/).
+## Version
 
-## Documentation
+| Component     | Version |
+|--------------|---------|
+| Wazuh Stack  | 4.14.0  |
+| Wazuh Agent  | 4.14.0  |
+| Deployment   | single-node Docker |
 
-| Document | Description |
-|---|---|
-| [Installation](installation.md) | Step-by-step setup of Docker stack and native Agent |
-| [Agent Configuration](agent-config.md) | ossec.conf, monitored log sources, enabled modules |
-| [Rules & Decoders](rules-decoders.md) | Custom rules and decoder configurations |
-| [Alerting](alerting.md) | Alert thresholds, notification setup, dashboard configuration |
+---
 
-## Related
-
-- Firewall configuration: [`docs/firewall-nftables/`](../firewall-nftables/)
-- Server nftables config: [`Projekt/configs/firewall/`](../../Projekt/configs/firewall/)
+*Part of ECN2026 — European Connected Network | tastlernetworks.com*
