@@ -12,7 +12,7 @@
 - OpenVAS
 - nftables
 - Nginx
-
+- SIEM / Wazuh
 
 ## Overview
 ECN2026 is a personal network engineering project simulating a multi-site
