@@ -13,6 +13,7 @@
 - nftables
 - Nginx
 - SIEM / Wazuh
+- Netbox
 
 ## Översikt
 ECN2026 är ett personligt nätverkstekniskt projekt som simulerar ett
