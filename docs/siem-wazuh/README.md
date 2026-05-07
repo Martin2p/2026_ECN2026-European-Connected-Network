@@ -78,17 +78,36 @@ Manager, Indexer, and Dashboard would run on dedicated infrastructure.
 
 ---
 
-### VPN-Only Dashboard Access
+### VPN-Only Access for All Wazuh Services
 
-**Context:** The Wazuh Dashboard exposes sensitive security data and must not be reachable
-from the public internet.
+**Context:** The Wazuh Dashboard exposes sensitive security data. Manager ports (1514, 1515,
+55000) must not be reachable from the public internet. The default `wazuh-docker` single-node
+setup binds all ports to `0.0.0.0`.
 
-**Decision:** Bind the Dashboard container exclusively to the WireGuard interface IP
-(`10.100.0.1:8443:5601`) and enforce access via nftables rules on `iifname "wg0"`.
+**Decision:** Bind all externally exposed ports explicitly to the WireGuard interface IP
+(`10.100.0.1`). Disable the external port binding for the Indexer (port 9200) entirely, as
+Manager and Dashboard communicate with it via the internal Docker network.
 
-**Reasoning:** Consistent with the existing security model for Grafana (`10.100.0.1:3000`)
-and OpenVAS (`10.100.0.1:8443` → moved to avoid conflict). Two independent enforcement
-layers: Docker port binding and nftables.
+**Reasoning:** Consistent with the existing security model for Grafana and OpenVAS. Two
+independent enforcement layers: Docker port binding and nftables. Even if nftables has a
+misconfiguration, the Docker binding prevents exposure.
+
+**Port binding after hardening (`docker-compose.yml`):**
+```yaml
+wazuh.dashboard:
+  ports:
+    - "10.100.0.1:8443:5601"
+
+wazuh.manager:
+  ports:
+    - "10.100.0.1:1514:1514"
+    - "10.100.0.1:1515:1515"
+    - "10.100.0.1:514:514/udp"
+    - "10.100.0.1:55000:55000"
+
+wazuh.indexer:
+  # port 9200 not exposed externally — internal Docker network only
+```
 
 **Trade-offs:** Dashboard is only accessible when connected to WireGuard VPN. Acceptable for
 a single-administrator setup.
@@ -188,7 +207,7 @@ nftables instead of iptables. This means Docker does not set up its own NAT or F
 
 ---
 
-### 2. Dashboard port conflict with OpenVAS
+### 2. Dashboard port conflict with Nginx
 
 **Problem:** `docker compose up` failed because port 443 was already allocated by the host
 Nginx web server.
@@ -203,6 +222,37 @@ ports:
 ports:
   - "10.100.0.1:8443:5601"
 ```
+
+---
+
+### 3. Wazuh Agent disconnected after port binding hardening
+
+**Problem:** After binding all Manager ports to `10.100.0.1` (WireGuard interface), the
+natively installed Wazuh Agent could no longer connect. The agent was configured to reach
+the Manager at `127.0.0.1:1514`, which was no longer bound.
+
+**Error in `/var/ossec/logs/ossec.log`:**
+```
+wazuh-agentd: ERROR: (1216): Unable to connect to '[127.0.0.1]:1514/tcp':
+'Transport endpoint is not connected'.
+```
+
+**Fix:** Updated the Manager address in `/var/ossec/etc/ossec.conf`:
+```xml
+<server>
+  <address>10.100.0.1</address>
+  <port>1514</port>
+  <protocol>tcp</protocol>
+</server>
+```
+
+```bash
+sudo systemctl restart wazuh-agent
+```
+
+**Reasoning:** The agent communicates with the Manager via the WireGuard interface, consistent
+with all other administrative access in ECN2026. This also means the agent connection is
+subject to the same nftables rules as other WireGuard traffic.
 
 ---
 
