@@ -109,8 +109,8 @@ wazuh.indexer:
   # port 9200 not exposed externally — internal Docker network only
 ```
 
-**Trade-offs:** Dashboard is only accessible when connected to WireGuard VPN. Acceptable for
-a single-administrator setup.
+**Trade-offs:**  The Wazuh Agent must connect to `10.100.0.1:1514` instead of `127.0.0.1:1514`,
+requiring an explicit configuration change in `ossec.conf` (see Lessons Learned #3).
 
 ---
 
@@ -157,6 +157,51 @@ sudo WAZUH_MANAGER='127.0.0.1' dpkg -i /tmp/wazuh-agent.deb
 sudo systemctl daemon-reload
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
+```
+
+---
+
+## Operations
+
+### Alert Triage — FIM Events
+
+Wazuh File Integrity Monitoring (FIM) generates Level 7 alerts (rule 550) whenever a
+monitored file is modified. Not every FIM alert indicates a threat — the standard triage
+workflow is:
+
+1. Identify the modified file from `syscheck.path` in the alert details
+2. Check the modification timestamp (`syscheck.mtime_after`)
+3. Cross-reference with package manager logs to confirm whether a system update caused
+   the change
+
+**Example:** Alert for `/usr/bin/rotatelogs` (part of `apache2-utils`):
+```bash
+grep "apache2" /var/log/apt/history.log
+# Output confirmed apache2 upgraded on the same date → alert classified as legitimate
+```
+
+If the modification timestamp does not match any known update or deployment, the alert
+should be treated as a potential incident and investigated further.
+
+---
+
+### SSH Brute-Force Monitoring
+
+The server receives a continuous stream of SSH brute-force attempts from automated scanners
+(observed: ~1,700 attempts per day). Wazuh detects these via rule group
+`authentication_failed` and rule IDs 5710/5711/5716.
+
+Fail2Ban runs alongside Wazuh and automatically bans IPs that exceed the failure threshold.
+Both tools must read from the same log source to be effective — see Lessons Learned #4.
+
+To view active bans:
+```bash
+sudo fail2ban-client status sshd
+```
+
+To search SSH brute-force alerts in the Wazuh Dashboard:
+```
+Threat Intelligence → Events → filter: rule.groups: authentication_failed
 ```
 
 ---
@@ -253,6 +298,40 @@ sudo systemctl restart wazuh-agent
 **Reasoning:** The agent communicates with the Manager via the WireGuard interface, consistent
 with all other administrative access in ECN2026. This also means the agent connection is
 subject to the same nftables rules as other WireGuard traffic.
+
+---
+
+### 4. Fail2Ban not reading SSH logs on Ubuntu 24.04
+
+**Problem:** Fail2Ban reported `Currently failed: 0` despite thousands of SSH brute-force
+attempts visible in Wazuh. Fail2Ban was configured to read `/var/log/auth.log`, but Ubuntu
+24.04 uses `systemd-journald` by default — making `auth.log` nearly empty.
+
+**Diagnosis:**
+```bash
+sudo fail2ban-client get sshd logpath
+# Output: /var/log/auth.log  ← wrong source
+```
+
+**Fix:** Changed the backend to `systemd` in `/etc/fail2ban/jail.local`:
+```ini
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+backend = systemd
+```
+
+Removed the `logpath` line entirely — not needed with `backend = systemd`.
+
+**Verification:**
+```bash
+sudo fail2ban-client status sshd
+# Output: Journal matches: _SYSTEMD_UNIT=sshd.service + _COMM=sshd
+```
+
+Fail2Ban now reads from the same source as Wazuh, ensuring consistent detection and
+blocking across both tools.
 
 ---
 
