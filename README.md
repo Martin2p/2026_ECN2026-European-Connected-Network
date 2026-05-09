@@ -67,7 +67,7 @@ ECN2026/
 
 ## Network Overview Diagram
 
-![ECN2026 Network Overview](diagrams/ECN2026_overview.png)
+![ECN2026 Network Overview](diagrams/ECN2026.png)
 
 *This diagram is a simplified, abstract representation created for educational
 and documentation purposes. It does not disclose real infrastructure details.*
