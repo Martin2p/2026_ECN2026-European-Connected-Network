@@ -67,13 +67,13 @@ ECN2026/
 
 ## Nätverksöversiktsdiagram
 
-![ECN2026 Network Overview](diagrams/ECN2026_overview.png)
+![ECN2026 Network Overview](diagrams/ECN2026.png)
 
 *Detta diagram är en förenklad och abstrakt representation som skapats
 för utbildnings- och dokumentationssyften. Det avslöjar inga verkliga
 infrastrukturd detaljer.*
 
-*Diagrammet är skapat med nätverkssimulatorn Filius.*
+*Diagrammet är skapat med draw.io .*
 
 ## Ansvarsfriskrivning
 Detta repository innehåller inga verkliga autentiseringsuppgifter,
