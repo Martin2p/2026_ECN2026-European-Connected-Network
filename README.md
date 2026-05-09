@@ -72,7 +72,7 @@ ECN2026/
 *This diagram is a simplified, abstract representation created for educational
 and documentation purposes. It does not disclose real infrastructure details.*
 
-*Diagram created using the Filius network simulator.*
+*Diagram created with draw.io*
 
 ## Disclaimer
 This repository contains no real credentials, IP addresses or provider details.
