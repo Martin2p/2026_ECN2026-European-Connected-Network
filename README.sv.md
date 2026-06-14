@@ -61,7 +61,7 @@ ECN2026/
 - Brandvägg och systemhärdning ✔
 - Sårbarhetsskanning (OpenVAS, Lynis) ✔
 - Övervakning & observerbarhet (Prometheus, Grafana) ✔
-- Loggning / SIEM (Wazuh) 🚧
+- Loggning / SIEM (Wazuh) ✔
 - IPAM – Strukturerad IP-adress- och VLAN-hantering (NetBox) 🚧
 - Failover- och resilenstestning 🚧
 
