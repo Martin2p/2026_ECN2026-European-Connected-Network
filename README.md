@@ -60,7 +60,7 @@ ECN2026/
 - Firewall and system hardening ✔
 - Vulnerability scanning (OpenVAS, Lynis) ✔
 - Monitoring & Observability (Prometheus, Grafana) ✔
-- Logging / SIEM (Wazuh) 🚧
+- Logging / SIEM (Wazuh) ✔
 - IPAM – Structured IP address and VLAN management (NetBox) 🚧
 - Failover and resilience testing 🚧
 
