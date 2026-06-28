@@ -64,6 +64,7 @@ Region: Europe
 
 ### VM: ecn2026-de-vps
 ![VM Detail](screenshots/vm-ecn2026-de-vps.png)
+
 *Primary ECN2026 node — documented with interfaces, primary IP, resources and all running services*
 
 ### Rack: CH-Home
@@ -73,10 +74,6 @@ Region: Europe
 ### WireGuard Tunnel
 ![WireGuard Tunnel](screenshots/wireguard-tunnel.png)
 *WireGuard tunnel documented between Raspberry Pi400 (SE-Home) and ecn2026-de-vps (DE-Contabo)*
-
-### IPAM — WireGuard Prefix
-![IPAM Prefix](screenshots/ipam-prefixes_.png)
-*10.100.0.0/24 — WireGuard VPN subnet managed in NetBox IPAM*
 
 ---
 
