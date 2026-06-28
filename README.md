@@ -61,7 +61,7 @@ ECN2026/
 - Vulnerability scanning (OpenVAS, Lynis) ✔
 - Monitoring & Observability (Prometheus, Grafana) ✔
 - Logging / SIEM (Wazuh) ✔
-- IPAM – Structured IP address and VLAN management (NetBox) 🚧
+- IPAM – Structured IP address and VLAN management (NetBox)  ✔
 - Failover and resilience testing 🚧
 
 
