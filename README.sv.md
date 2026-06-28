@@ -62,7 +62,7 @@ ECN2026/
 - Sårbarhetsskanning (OpenVAS, Lynis) ✔
 - Övervakning & observerbarhet (Prometheus, Grafana) ✔
 - Loggning / SIEM (Wazuh) ✔
-- IPAM – Strukturerad IP-adress- och VLAN-hantering (NetBox) 🚧
+- IPAM – Strukturerad IP-adress- och VLAN-hantering (NetBox)  ✔
 - Failover- och resilenstestning 🚧
 
 ## Nätverksöversiktsdiagram
