@@ -43,7 +43,7 @@ ECN2026/
 └── notes/       # Läranteckningar och observationer
 
 ## Status
-🚧 Pågående arbete (2026)
+Avslutat (06.2026)
 
 ## Projekt-roadmap
 
@@ -63,8 +63,8 @@ ECN2026/
 - Övervakning & observerbarhet (Prometheus, Grafana) ✔
 - Loggning / SIEM (Wazuh) ✔
 - IPAM – Strukturerad IP-adress- och VLAN-hantering (NetBox)  ✔
-- Failover- och resilenstestning 🚧
-
+- Failover- och resilenstestning  ✔
+  
 ## Nätverksöversiktsdiagram
 
 ![ECN2026 Network Overview](diagrams/ECN2026.png)
