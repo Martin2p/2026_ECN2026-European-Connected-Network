@@ -42,7 +42,7 @@ ECN2026/
 └── notes/       # Learning notes & observations
 
 ## Status
-🚧 Work in progress (2026)
+Finished (06.2026)
 
 ## Project Roadmap
 
@@ -62,7 +62,7 @@ ECN2026/
 - Monitoring & Observability (Prometheus, Grafana) ✔
 - Logging / SIEM (Wazuh) ✔
 - IPAM – Structured IP address and VLAN management (NetBox)  ✔
-- Failover and resilience testing 🚧
+- Failover and resilience testing ✔
 
 
 ## Network Overview Diagram
